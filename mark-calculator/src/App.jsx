@@ -1,98 +1,116 @@
 import React, { useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import './App.css';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const gradePoints = {
+  'O': 10, 'A+': 9, 'A': 8, 'B+': 7, 'B': 6, 'C': 5, 'P': 4, 'F': 0
+};
 
 function App() {
-  const [mode, setMode] = useState('school'); // 'school' or 'college'
-  const [subjects, setSubjects] = useState([
-    { name: '', score: '', credits: '3' }
-  ]);
-  const [result, setResult] = useState(null);
+  const [mode, setMode] = useState('Marks'); // 'school', 'gpa', or 'cgpa'
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [items, setItems] = useState([{ name: '', val1: '', val2: 'O' }]); // Generic state for all modes
+  const [result, setResult] = useState(null);
 
-  const addSubject = () => setSubjects([...subjects, { name: '', score: '', credits: '3' }]);
+  const resetAll = (newMode) => {
+    setMode(newMode);
+    setResult(null);
+    if (newMode === 'cgpa') {
+      setItems([{ name: 'Semester 1', val1: '' }]);
+    } else if (newMode === 'gpa') {
+      setItems([{ name: '', val1: '3', val2: 'A' }]); // val1 = Credits, val2 = Grade
+    } else {
+      setItems([{ name: '', val1: '' }]); // val1 = Marks
+    }
+  };
 
   const calculate = () => {
-    const totalMarks = subjects.reduce((sum, s) => sum + Number(s.score || 0), 0);
-    const avg = totalMarks / subjects.length;
-    
-    // College GPA Logic (Rough estimate based on 10-point scale)
-    const totalCredits = subjects.reduce((sum, s) => sum + Number(s.credits || 0), 0);
-    const gpa = (avg / 10).toFixed(2);
-
-    let grade = 'F';
-    let color = '#ff4d4d';
-    if (avg >= 90) { grade = 'S'; color = '#00f2fe'; }
-    else if (avg >= 80) { grade = 'A'; color = '#4facfe'; }
-    else if (avg >= 70) { grade = 'B'; color = '#f9d423'; }
-    else { grade = 'C'; color = '#667eea'; }
-
-    setResult({ total: totalMarks, avg: avg.toFixed(2), gpa, grade, color });
+    if (mode === 'school') {
+      const total = items.reduce((sum, i) => sum + Number(i.val1 || 0), 0);
+      const avg = (total / items.length).toFixed(2);
+      setResult({ main: `${avg}%`, sub: `Total: ${total}` });
+    } else if (mode === 'gpa') {
+      let totalPts = 0, totalCr = 0;
+      items.forEach(i => {
+        totalPts += (gradePoints[i.val2] * Number(i.val1 || 0));
+        totalCr += Number(i.val1 || 0);
+      });
+      setResult({ main: (totalPts / totalCr).toFixed(2), sub: `Total Credits: ${totalCr}` });
+    } else {
+      const valid = items.filter(i => i.val1 !== '');
+      const totalGpa = valid.reduce((sum, i) => sum + Number(i.val1), 0);
+      setResult({ main: (totalGpa / valid.length).toFixed(2), sub: `Overall Standing` });
+    }
   };
 
   return (
-    <div className={`app-container ${isDarkMode ? 'dark' : 'light'}`}>
+    <div className={`app-wrapper ${isDarkMode ? 'dark' : 'light'}`}>
+      <button className="theme-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+        {isDarkMode ? '☀️' : '🌙'}
+      </button>
+
       <div className="glass-card">
-        <div className="header-actions">
-          <button className="mode-toggle" onClick={() => setMode(mode === 'school' ? 'college' : 'school')}>
-            Switch to {mode === 'school' ? 'College (GPA)' : 'School (%)'}
-          </button>
-          <button className="theme-icon" onClick={() => setIsDarkMode(!isDarkMode)}>
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
+        <div className="triple-mode-switch">
+          <button className={mode === 'school' ? 'active' : ''} onClick={() => resetAll('school')}>School</button>
+          <button className={mode === 'gpa' ? 'active' : ''} onClick={() => resetAll('gpa')}>GPA</button>
+          <button className={mode === 'cgpa' ? 'active' : ''} onClick={() => resetAll('cgpa')}>CGPA</button>
         </div>
 
-        <h1 className="main-title">{mode === 'school' ? 'School Report' : 'University GPA'}</h1>
+        <h1 className="hero-title">
+          {mode === 'school' ? 'Mark Sheet' : mode === 'gpa' ? 'GPA Calc' : 'CGPA Tracker'}
+        </h1>
 
-        <div className="subject-container">
-          {subjects.map((sub, index) => (
-            <div key={index} className="input-row-modern">
+        <div className="input-list">
+          {items.map((item, index) => (
+            <div key={index} className="modern-row">
               <input 
-                className="modern-input" 
-                placeholder="Subject Name"
-                value={sub.name} 
+                placeholder={mode === 'cgpa' ? "Sem Name" : "Subject"} 
+                className="base-input" 
+                value={item.name} 
                 onChange={(e) => {
-                  const n = [...subjects]; n[index].name = e.target.value; setSubjects(n);
-                }}
+                  const n = [...items]; n[index].name = e.target.value; setItems(n);
+                }} 
               />
-              <input 
-                className="modern-input small" 
-                type="number" 
-                placeholder="Mark" 
-                value={sub.score}
-                onChange={(e) => {
-                  const n = [...subjects]; n[index].score = e.target.value; setSubjects(n);
-                }}
-              />
-              {mode === 'college' && (
-                <input 
-                  className="modern-input small credit" 
-                  type="number" 
-                  placeholder="Cr" 
-                  value={sub.credits}
+              
+              {mode === 'gpa' && (
+                <select 
+                  className="base-input small-input grade-select" 
+                  value={item.val2} 
                   onChange={(e) => {
-                    const n = [...subjects]; n[index].credits = e.target.value; setSubjects(n);
+                    const n = [...items]; n[index].val2 = e.target.value; setItems(n);
                   }}
-                />
+                >
+                  {Object.keys(gradePoints).map(g => <option key={g} value={g}>{g}</option>)}
+                </select>
               )}
-              <button className="remove-btn" onClick={() => setSubjects(subjects.filter((_, i) => i !== index))}>×</button>
+
+              <input 
+                type="number" 
+                placeholder={mode === 'school' ? "Marks" : mode === 'gpa' ? "Credits" : "GPA"} 
+                className="base-input small-input" 
+                value={item.val1} 
+                onChange={(e) => {
+                  const n = [...items]; n[index].val1 = e.target.value; setItems(n);
+                }} 
+              />
+              <button className="row-del" onClick={() => setItems(items.filter((_, i) => i !== index))}>×</button>
             </div>
           ))}
         </div>
 
-        <div className="footer-btns">
-          <button className="add-subject-btn" onClick={addSubject}>+ Add New Subject</button>
-          <button className="analyze-btn" onClick={calculate}>Analyze Performance</button>
+        <button className="fancy-add-btn" onClick={() => setItems([...items, { name: mode === 'cgpa' ? `Sem ${items.length + 1}` : '', val1: mode === 'gpa' ? '3' : '', val2: 'A' }])}>
+          + Add Field
+        </button>
+
+        <div className="main-actions">
+          <button className="glow-calc-btn" onClick={calculate}>Analyze</button>
+          <button className="clear-btn" onClick={() => resetAll(mode)}>Reset</button>
         </div>
 
         {result && (
-          <div className="stats-display">
-            <div className="grade-ring" style={{ borderColor: result.color }}>
-              <h2 style={{ color: result.color }}>{result.grade}</h2>
-              <p>{mode === 'school' ? `${result.avg}%` : `GPA: ${result.gpa}`}</p>
+          <div className="stats-container">
+            <div className="grade-box">
+              <h2>{result.main}</h2>
+              <span>{result.sub}</span>
             </div>
           </div>
         )}
