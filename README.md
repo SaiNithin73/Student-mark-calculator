@@ -1,77 +1,91 @@
 # 🎓 All-in-One Student Analytics Dashboard
 
-A premium, high-performance web application built with **React** and **Vite**. This tool is designed for students across all levels—from school pupils tracking marks to university students managing GPA and CGPA.
-
-
-
-## 🚀 Live Demo
-**Check it out here:** [Insert your Vercel Link Here]
+A premium, high-performance web application built with **React** and **Vite**.  
+This tool is designed for students across all levels — from school pupils tracking marks to university students managing GPA and CGPA.
 
 ---
 
 ## ✨ Features
 
-### 1. 🏫 School Mode
-- Input raw marks for various subjects.
-- Automatically calculates **Total Marks** and **Percentage**.
-- Real-time updates as you type.
+### 🏫 School Mode
+- Enter subject-wise marks
+- Automatic **Total Marks** and **Percentage**
+- Real-time calculations
 
-### 2. 🏛️ College GPA Mode
-- Uses the standard **Grade Point System** (O, A+, A, B, etc.).
-- Includes **Credit-Hour weighting** logic for accurate Semester GPA.
-- Custom dropdowns optimized for both light and dark themes.
+### 🏛️ College GPA Mode
+- Standard **Grade Point System** (O, A+, A, B, etc.)
+- Credit-based GPA calculation
+- Clean dropdown UI for grades
 
-### 3. 📈 College CGPA Mode
-- Track your progress across multiple semesters.
-- Calculate your **Cumulative GPA** by averaging semester performances.
+### 📈 College CGPA Mode
+- Track multiple semesters
+- Automatic **CGPA calculation**
 
-### 4. 🎨 Premium UI/UX
-- **Glassmorphism Design:** Modern frosted-glass aesthetic with blurred backgrounds.
-- **Dynamic Theming:** Seamlessly switch between **Dark Mode** and **Light Mode**.
-- **Interactive Controls:** Add or remove fields dynamically and reset with a single click.
+### 🎨 Premium UI/UX
+- Glassmorphism design
+- Dark & Light mode toggle
+- Dynamic add/remove fields
+- One-click reset
 
 ---
+
 ## 📸 UI Preview
-- **Dark Mode:** Deep purple gradients with glowing neon accents.
-
-- **Light Mode:** Soft pastel colors with a frosted-glass aesthetic.
-
-- **Analytics:** Dynamic grade rings that change color based on the result (A+, B, C, etc.).
+- **Dark Mode:** Purple gradients with neon highlights  
+- **Light Mode:** Soft pastel glassmorphism  
+- **Analytics:** Dynamic grade indicators
 
 ---
+
 ## 🛠️ Tech Stack
 
-- **Framework:** [React.js](https://reactjs.org/)
-- **Build Tool:** [Vite](https://vitejs.dev/)
-- **Styling:** CSS3 (Custom Variables & Glassmorphism)
-- **Icons/Fonts:** Google Fonts (Outfit)
+- **Frontend:** React.js
+- **Build Tool:** Vite
+- **Styling:** CSS3 (Glassmorphism + CSS Variables)
+- **Fonts & Icons:** Google Fonts (Outfit)
 
 ---
 
 ## 📦 Installation & Setup
 
-If you want to run this project locally, follow these steps:
+Follow these steps to run the project locally:
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/student-mark-calculator.git](https://github.com/YOUR_USERNAME/student-mark-calculator.git)
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/SaiNithin73/student-mark-calculator.git
+```
 
-2. **Navigate to the directory:**
-   ```bash
-  cd student-mark-calculator
-3. **Install dependencies:**
-    ```bash
-    npm install
-4. **Start the development server:**
-    ```bash
-    npm run dev
-📸 Project ScreenshotsModeThemeDescriptionSchoolDarkHigh-contrast marks entryGPALightClean Grade-to-Point selectionCGPADarkOverall academic standing tracker
+### 2️⃣ Navigate into the project folder
+```bash
+cd student-mark-calculator
+```
+
+### 3️⃣ Install dependencies
+```bash
+npm install
+```
+
+### 4️⃣ Start the development server
+```bash
+npm run dev
+```
+
+### 5️⃣ Open in browser
+```
+http://localhost:5173
+```
+
+---
 
 ## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+Contributions, issues, and feature requests are welcome.  
+Feel free to open an issue or submit a pull request.
+
+---
 
 ## 📜 License
-This project is MIT licensed.
+This project is licensed under the **MIT License**.
 
-## Developed by Sai Nithin
 ---
+
+## 👨‍💻 Developed By
+**Sai Nithin**
